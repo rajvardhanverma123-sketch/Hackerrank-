@@ -1,0 +1,39 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct {
+    int order_num;
+    int finish_time;
+} Order;
+
+int cmp(const void* a, const void* b) {
+    Order* o1 = (Order*)a;
+    Order* o2 = (Order*)b;
+    if (o1->finish_time != o2->finish_time)
+        return o1->finish_time - o2->finish_time;
+    return o1->order_num - o2->order_num;
+}
+
+int main() {
+    int n;
+    scanf("%d", &n);
+
+    Order* orders = malloc(n * sizeof(Order));
+
+    for (int i = 0; i < n; i++) {
+        int order_time, prep_time;
+        scanf("%d %d", &order_time, &prep_time);
+        orders[i].order_num = i + 1;
+        orders[i].finish_time = order_time + prep_time;
+    }
+
+    qsort(orders, n, sizeof(Order), cmp);
+
+    for (int i = 0; i < n; i++) {
+        printf("%d ", orders[i].order_num);
+    }
+    printf("\n");
+
+    free(orders);
+    return 0;
+}
