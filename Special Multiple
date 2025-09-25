@@ -1,0 +1,97 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_N 500
+
+// Function to find the smallest number made of 9's and 0's that is divisible by N
+char* find_special_multiple(int N) {
+    // Initialize a queue to store numbers as strings
+    char* queue[MAX_N * 10];
+    int front = 0, rear = 0;
+
+    // Allocate memory for the first number "9"
+    queue[rear] = (char*)malloc(2 * sizeof(char));
+    strcpy(queue[rear], "9");
+    rear++;
+
+    // Array to keep track of remainders
+    int visited[MAX_N] = {0};
+    visited[9 % N] = 1;
+
+    // Perform a breadth-first search to find the smallest number
+    while (front < rear) {
+        // Get the current number from the queue
+        char* current = queue[front];
+        front++;
+
+        // Convert the current number to an integer
+        int remainder = 0;
+        for (int i = 0; current[i] != '\0'; i++) {
+            remainder = (remainder * 10 + (current[i] - '0')) % N;
+        }
+
+        // Check if the current number is divisible by N
+        if (remainder == 0) {
+            return current;
+        }
+
+        // Generate the next numbers by appending '0' and '9'
+        char* next_0 = (char*)malloc(strlen(current) + 2);
+        char* next_9 = (char*)malloc(strlen(current) + 2);
+
+        strcpy(next_0, current);
+        strcat(next_0, "0");
+        strcpy(next_9, current);
+        strcat(next_9, "9");
+
+        // Calculate the new remainders
+        int rem_0 = (remainder * 10) % N;
+        int rem_9 = (remainder * 10 + 9) % N;
+
+        // Enqueue the new numbers if their remainders have not been visited
+        if (!visited[rem_0]) {
+            queue[rear] = next_0;
+            visited[rem_0] = 1;
+            rear++;
+        } else {
+            free(next_0);
+        }
+
+        if (!visited[rem_9]) {
+            queue[rear] = next_9;
+            visited[rem_9] = 1;
+            rear++;
+        } else {
+            free(next_9);
+        }
+
+        // Free the memory for the current number
+        free(current);
+    }
+
+    // Return NULL if no solution is found
+    return NULL;
+}
+
+int main() {
+    int T;
+    scanf("%d", &T);
+
+    // Process each test case
+    for (int t = 0; t < T; t++) {
+        int N;
+        scanf("%d", &N);
+
+        // Find the special multiple for the current N
+        char* result = find_special_multiple(N);
+
+        // Print the result
+        printf("%s\n", result);
+
+        // Free the memory allocated for the result
+        free(result);
+    }
+
+    return 0;
+}
