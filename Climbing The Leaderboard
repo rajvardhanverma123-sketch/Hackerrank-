@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-
 int* climbingLeaderboard(int scores_count, int* scores, int alice_count, int* alice, int* result_count) {
     int* unique_scores = malloc(scores_count * sizeof(int));
     int unique_count = 0;
@@ -26,32 +23,3 @@ int* climbingLeaderboard(int scores_count, int* scores, int alice_count, int* al
     return result;
 }
 
-int main() {
-    int scores_count;
-    scanf("%d", &scores_count);
-
-    int* scores = malloc(scores_count * sizeof(int));
-    for (int i = 0; i < scores_count; i++) {
-        scanf("%d", &scores[i]);
-    }
-
-    int alice_count;
-    scanf("%d", &alice_count);
-
-    int* alice = malloc(alice_count * sizeof(int));
-    for (int i = 0; i < alice_count; i++) {
-        scanf("%d", &alice[i]);
-    }
-
-    int result_count;
-    int* result = climbingLeaderboard(scores_count, scores, alice_count, alice, &result_count);
-
-    for (int i = 0; i < result_count; i++) {
-        printf("%d\n", result[i]);
-    }
-
-    free(scores);
-    free(alice);
-    free(result);
-    return 0;
-}
