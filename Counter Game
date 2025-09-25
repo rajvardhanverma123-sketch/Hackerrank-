@@ -1,0 +1,33 @@
+#include <stdio.h>
+
+int counterGame(long long n) {
+    int turns = 0;
+    while (n > 1) {
+        // Check if n is a power of 2
+        if ((n & (n - 1)) == 0) {
+            n >>= 1; // Divide by 2
+        } else {
+            // Subtract the largest power of 2 less than n
+            long long power = 1;
+            while (power <= n) {
+                power <<= 1;
+            }
+            power >>= 1;
+            n -= power;
+        }
+        turns++;
+    }
+    return (turns % 2 == 0) ? 1 : 0; // 1 for Richard, 0 for Louise
+}
+
+int main() {
+    int t;
+    scanf("%d", &t);
+    while (t--) {
+        long long n;
+        scanf("%lld", &n);
+        int winner = counterGame(n);
+        printf("%s\n", winner == 0 ? "Louise" : "Richard");
+    }
+    return 0;
+}
