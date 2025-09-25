@@ -1,0 +1,52 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct {
+    int cost;
+    int index;
+} Pair;
+
+#define HASH_SIZE 100003
+
+int hash(int key) {
+    if (key < 0) key = -key;
+    return key % HASH_SIZE;
+}
+
+int main() {
+    int t;
+    scanf("%d", &t);
+    while (t--) {
+        int m, n;
+        scanf("%d %d", &m, &n);
+        int *cost = malloc(n * sizeof(int));
+
+        Pair *table = calloc(HASH_SIZE, sizeof(Pair));
+
+        for (int i = 0; i < n; i++) {
+            scanf("%d", &cost[i]);
+        }
+
+        for (int i = 0; i < n; i++) {
+            int need = m - cost[i];
+            int h = hash(need);
+            while (table[h].cost != 0) {
+                if (table[h].cost == need) {
+                    printf("%d %d\n", table[h].index, i + 1);
+                    goto done;
+                }
+                h = (h + 1) % HASH_SIZE;
+            }
+            int h2 = hash(cost[i]);
+            while (table[h2].cost != 0) {
+                h2 = (h2 + 1) % HASH_SIZE;
+            }
+            table[h2].cost = cost[i];
+            table[h2].index = i + 1;
+        }
+        done:
+        free(cost);
+        free(table);
+    }
+    return 0;
+}
