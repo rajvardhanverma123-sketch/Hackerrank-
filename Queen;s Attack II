@@ -1,0 +1,55 @@
+// Initial max possible moves in all 8 directions
+int up = n - r_q;
+int down = r_q - 1;
+int right = n - c_q;
+int left = c_q - 1;
+int up_right = (n - r_q < n - c_q) ? (n - r_q) : (n - c_q);
+int up_left = (n - r_q < c_q - 1) ? (n - r_q) : (c_q - 1);
+int down_right = (r_q - 1 < n - c_q) ? (r_q - 1) : (n - c_q);
+int down_left = (r_q - 1 < c_q - 1) ? (r_q - 1) : (c_q - 1);
+
+for (int i = 0; i < obstacles_rows; i++) {
+    int r = obstacles[i][0];
+    int c = obstacles[i][1];
+    int dr = r - r_q;
+    int dc = c - c_q;
+
+    // Same column
+    if (dc == 0) {
+        if (dr > 0) { // up
+            int dist = dr - 1;
+            if (dist < up) up = dist;
+        } else { // down
+            int dist = -dr - 1;
+            if (dist < down) down = dist;
+        }
+    }
+    // Same row
+    else if (dr == 0) {
+        if (dc > 0) { // right
+            int dist = dc - 1;
+            if (dist < right) right = dist;
+        } else { // left
+            int dist = -dc - 1;
+            if (dist < left) left = dist;
+        }
+    }
+    // Diagonals
+    else if (abs(dr) == abs(dc)) {
+        if (dr > 0 && dc > 0) { // up-right
+            int dist = dr - 1;
+            if (dist < up_right) up_right = dist;
+        } else if (dr > 0 && dc < 0) { // up-left
+            int dist = dr - 1;
+            if (dist < up_left) up_left = dist;
+        } else if (dr < 0 && dc > 0) { // down-right
+            int dist = -dr - 1;
+            if (dist < down_right) down_right = dist;
+        } else if (dr < 0 && dc < 0) { // down-left
+            int dist = -dr - 1;
+            if (dist < down_left) down_left = dist;
+        }
+    }
+}
+
+return up + down + left + right + up_right + up_left + down_right + down_left;
