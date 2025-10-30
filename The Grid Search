@@ -1,0 +1,50 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main() {
+    int T;
+    scanf("%d", &T);
+    while (T--) {
+        int R, C;
+        scanf("%d %d", &R, &C);
+        char **G = (char **)malloc(R * sizeof(char *));
+        for (int i = 0; i < R; ++i) {
+            G[i] = (char *)malloc((C + 1) * sizeof(char));
+            scanf("%s", G[i]);
+        }
+        int r, c;
+        scanf("%d %d", &r, &c);
+        char **P = (char **)malloc(r * sizeof(char *));
+        for (int i = 0; i < r; ++i) {
+            P[i] = (char *)malloc((c + 1) * sizeof(char));
+            scanf("%s", P[i]);
+        }
+        int found = 0;
+        for (int i = 0; i <= R - r && !found; ++i) {
+            char *search_ptr = G[i];
+            char *pos = NULL;
+            while ((pos = strstr(search_ptr, P[0])) != NULL) {
+                int col = pos - G[i];
+                int ok = 1;
+                for (int k = 1; k < r; ++k) {
+                    if (strncmp(G[i + k] + col, P[k], c) != 0) {
+                        ok = 0;
+                        break;
+                    }
+                }
+                if (ok) {
+                    found = 1;
+                    break;
+                }
+                search_ptr = pos + 1;
+            }
+        }
+        printf(found ? "YES\n" : "NO\n");
+        for (int i = 0; i < R; ++i) free(G[i]);
+        free(G);
+        for (int i = 0; i < r; ++i) free(P[i]);
+        free(P);
+    }
+    return 0;
+}
