@@ -1,0 +1,39 @@
+char* happyLadybugs(char* b) {
+    int freq[26] = {0};
+    int len = strlen(b);
+    bool has_empty = false;
+
+    for (int i = 0; i < len; i++) {
+        if (b[i] == '_') has_empty = true;
+        else freq[b[i] - 'A']++;
+    }
+
+    // Case 1: If no underscore, the string must already be happy
+    if (!has_empty) {
+        for (int i = 0; i < len; i++) {
+            if ((i > 0 && b[i] == b[i-1]) || (i < len-1 && b[i] == b[i+1])) {
+                continue;
+            } else {
+                // unhappy ladybug found
+                char* s = malloc(3);
+                strcpy(s, "NO");
+                return s;
+            }
+        }
+        char* s = malloc(4);
+        strcpy(s, "YES");
+        return s;
+    }
+
+    for (int i = 0; i < 26; i++) {
+        if (freq[i] == 1) {
+            char* s = malloc(3);
+            strcpy(s, "NO");
+            return s;
+        }
+    }
+
+    char* s = malloc(4);
+    strcpy(s, "YES");
+    return s;
+}
