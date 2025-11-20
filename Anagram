@@ -1,0 +1,23 @@
+int anagram(string s) {
+    if (s.length() % 2 != 0)
+        return -1;
+
+    int n = s.length() / 2;
+    string s1 = s.substr(0, n);
+    string s2 = s.substr(n);
+
+    int freq[26] = {0};
+
+    for (char c : s1)
+        freq[c - 'a']++;
+
+    for (char c : s2)
+        if (freq[c - 'a'] > 0)
+            freq[c - 'a']--;
+
+    int changes = 0;
+    for (int i = 0; i < 26; i++)
+        changes += freq[i];
+
+    return changes;
+}
